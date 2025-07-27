@@ -3,9 +3,10 @@ import bs4 as bs
 import pandas as pd
 import time 
 import requests
+import re
 
-df = pd.read_csv('D:/PSU/241-353/Prof.Thanatip/MyTCAS_Dashboard/data/external/major_link.csv')
-data = pd.DataFrame(columns=['มหาวิทยาลัย', 'หลักสูตร' , 'หลักสูตรEng', 'ประเภทหลักสูตร','สาขาวิชา', 'วิทยาเขต', 'ค่าใช้จ่าย'])
+df = pd.read_csv('..\data\major_link.csv')
+data = pd.DataFrame(columns=['มหาวิทยาลัย', 'หลักสูตร' , 'หลักสูตรEng', 'ประเภทหลักสูตร', 'วิทยาเขต', 'ค่าใช้จ่าย'])
 def parser(link ,df):
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
@@ -22,11 +23,10 @@ def parser(link ,df):
         data = {
             'มหาวิทยาลัย': name.strip(),
             'คณะ': major.text.strip(),
-            'คณะ2': specific.text.strip(),
+            'สาขา': specific.text.strip(),
             'หลักสูตร': '',
             'หลักสูตรEng': '',
             'ประเภทหลักสูตร': '',
-            'สาขาวิชา': '',
             'วิทยาเขต': '',
             'ค่าใช้จ่าย': ''
         }
@@ -45,12 +45,12 @@ def parser(link ,df):
                 data['หลักสูตรEng'] = value
             elif title == 'ประเภทหลักสูตร':
                 data['ประเภทหลักสูตร'] = value
-            elif title == 'สาขาวิชา':
-                data['สาขาวิชา'] = value
             elif title == 'วิทยาเขต':
                 data['วิทยาเขต'] = value
             elif title == 'ค่าใช้จ่าย':
-                data['ค่าใช้จ่าย'] = value
+               data['ค่าใช้จ่าย'] = value
+
+                    
 
         new_data = pd.DataFrame([data])
             
@@ -64,4 +64,4 @@ for i in df['link']:
     data = parser(i, data)
     print('success')
 
-data.to_csv('Tuition.csv', index=False)
+data.to_csv('raw.csv', index=False)
