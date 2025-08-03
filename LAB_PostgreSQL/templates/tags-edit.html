@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block body %}
+<h3 class="my-2">Edit Tag</h3>
+<form action="" method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group my-3">
+        {{ form.name.label }}
+        {{ form.name(class_='form-control', id='tag-name-input') }}
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <button type="button" class="btn btn-secondary" onclick="resetTagName()">Reset</button>
+    <a href="{{ url_for('tags_view', tag_name=tag.name) }}" class="btn btn-outline-secondary">Cancel</a>
+</form>
+
+<script>
+function resetTagName() {
+    document.getElementById('tag-name-input').value = '';
+    document.getElementById('tag-name-input').focus();
+}
+</script>
+{% endblock %}

@@ -1,10 +1,13 @@
 from wtforms_sqlalchemy.orm import model_form
 from flask_wtf import FlaskForm
-from wtforms import Field, widgets
+from wtforms import Field, widgets , StringField
+from wtforms.validators import DataRequired
 
 import models
 
-
+class TagForm(FlaskForm):
+    name = StringField("Name", validators=[DataRequired()])
+    
 class TagListField(Field):
     widget = widgets.TextInput()
 

@@ -5,8 +5,17 @@
   <li class="nav-item">
     <a class="btn btn-primary" href="{{ url_for('index') }}">Home</a>
   </li>
-  <li class="nav-item">
-    <div class="btn btn-disagle">{{ tag }}</div>
+  <li class="nav-item ms-2">
+    <span class="btn btn-outline-secondary">{{ tag_name }}</span>
+  </li>
+  <li class="nav-item ms-2">
+    <a class="btn btn-warning" href="{{ url_for('tags_edit', tag_id=tag.id) }}">Edit Tag</a>
+  </li>
+  <li class="nav-item ms-2">
+    <form method="POST" action="{{ url_for('tags_delete', tag_id=tag.id) }}" style="display: inline;" 
+          onsubmit="return confirm('Are you sure you want to delete this tag? This will remove it from all notes.')">
+      <button type="submit" class="btn btn-danger">Delete Tag</button>
+    </form>
   </li>
 </ul>
 {% for note in notes %}
@@ -19,7 +28,7 @@
     <div class="card-footer text-muted">
       Tags: 
       {% for t in note.tags %}
-        <a href="{{ url_for('tags_view', tag_name=t.name) }}">{{ t.name }}</a>,
+        <a href="{{ url_for('tags_view', tag_name=t.name) }}">{{ t.name }}</a>{% if not loop.last %}, {% endif %}
       {% endfor %}
       <br>
       Last update: {{ note.updated_date }}
